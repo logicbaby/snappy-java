@@ -81,7 +81,7 @@ $(SNAPPY_GIT_UNPACKED):
 
 $(SNAPPY_CMAKE_CACHE): $(SNAPPY_GIT_UNPACKED)
 	@mkdir -p $(SNAPPY_OUT)
-	cd $(SNAPPY_OUT) && cmake $(SNAPPY_CMAKE_OPTS) ../../$(SNAPPY_SRC_DIR)
+	cd $(SNAPPY_OUT) && cmake3 $(SNAPPY_CMAKE_OPTS) ../../$(SNAPPY_SRC_DIR)
 	touch $@
 
 jni-header: $(SNAPPY_GIT_UNPACKED) $(BITSHUFFLE_UNPACKED) $(SRC)/org/xerial/snappy/SnappyNative.h $(SRC)/org/xerial/snappy/BitShuffleNative.h
@@ -106,7 +106,9 @@ $(SNAPPY_SRC): $(SNAPPY_GIT_UNPACKED)
 
 # aarch64 can use big-endian optimzied code
 ifeq ($(OS_ARCH),aarch64)
+ifeq ($(ENDIANESS),$(BIG_ENDIAN))
 SNAPPY_CXX_OPTS:=-DSNAPPY_IS_BIG_ENDIAN
+endif
 endif
 
 $(SNAPPY_OUT)/%.o: $(SNAPPY_SRC_DIR)/%.cc
